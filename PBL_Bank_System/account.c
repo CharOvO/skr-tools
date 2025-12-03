@@ -42,6 +42,18 @@ int create_account(const char *name)
 // TODO:遍历并打印所有账户的详细信息。
 void display_all_accounts()
 {
+    // 检查是否存在账户信息
+    if(account_count == 0){
+        printf("当前系统不存在账户信息!\n");
+        return;
+    }
+
+    printf("ID\t姓名\t余额\n");
+    for (int i = 0; i < account_count; i++)
+    {
+        printf("%d\t%s\t%.2f\n",accounts[i].id,accounts[i].name,accounts[i].balance);
+    }
+    return;
 }
 
 // ====== 账户查找 (FUN-003) ======

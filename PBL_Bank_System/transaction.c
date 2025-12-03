@@ -14,7 +14,7 @@ int deposit(int id, double amount)
     Account *acc = find_account_by_id(id);
     if (acc == NULL)
     {
-        return 0; // 失败：账户不存在
+        return -1; // 失败：账户不存在
     }
 
     // 3. 执行存款
@@ -26,6 +26,27 @@ int deposit(int id, double amount)
 // TODO:从指定账户取出资金。成功返回1，失败返回0。
 int withdraw(int id, double amount)
 {
+    // 1. 验证金额合法性
+    if (!is_valid_amount(amount))
+    {
+        return 0; // 失败：金额必须为正数
+    }
+
+    // 2. 查找账户
+    Account *acc = find_account_by_id(id);
+    if (acc == NULL)
+    {
+        return -1; // 失败：账户不存在
+    }
+
+    // 3. 判断余额
+    if(acc->balance>=amount){
+        acc->balance -= amount;
+        return 1; // 成功
+    }else{
+        return -2; // 失败:余额不足
+    }
+    
 }
 
 // ====== 余额查询 (FUN-006) ======

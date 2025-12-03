@@ -69,6 +69,8 @@ void run_system()
             break;
 
         case 2: // TODO:显示所有账户
+            display_all_accounts();
+            break;
 
         case 3: // 查找账户
             printf("请输入要查找的账户ID：");
@@ -82,7 +84,8 @@ void run_system()
             Account *acc = find_account_by_id(id);
             if (acc)
             {
-                printf("账户ID：%d, 姓名：%s, 余额：%.2f\n", acc->id, acc->name, acc->balance);
+                printf("ID\t姓名\t余额\n");
+                printf("%d\t%s\t%.2f\n", acc->id, acc->name, acc->balance);
             }
             else
             {
@@ -91,8 +94,53 @@ void run_system()
             break;
 
         case 4: // TODO:存款
+            printf("请输入要存款的账户ID：");
+            scanf("%d", &id);
+            clear_input_buffer();
+            printf("请输入要存款的金额："); 
+            scanf("%lf", &amount);
+            clear_input_buffer();
+            switch(deposit(id, amount)){
+                case 0:
+                    printf("金额必须为正数!\n");
+                    break;
+                case -1:
+                    printf("未找到该账户！\n");
+                    break;
+
+                case 1:
+                    printf("存款成功!\n");
+                    break;
+                }
+
+            break;
+           
+           
 
         case 5: // TODO:取款
+            printf("请输入要取款的账户ID：");
+            scanf("%d", &id);
+            clear_input_buffer();
+            printf("请输入要取款的金额：");
+            scanf("%lf", &amount);
+            clear_input_buffer();
+            switch (withdraw(id, amount)) 
+            {
+            case 0:
+                printf("金额必须为正数!\n");
+                break;
+            case -1:
+                printf("未找到该账户！\n");
+                break;
+            case -2:
+                printf("余额不足！\n");
+                break;
+            case 1:
+                printf("取款成功!\n");
+                break;
+            }
+
+            break;
 
         case 6: // 余额查询
             printf("请输入账户ID：");
@@ -115,9 +163,9 @@ void run_system()
             break;
 
         case 7: // TODO:保存数据
-
+            save_data();
         case 8: // TODO:加载数据
-
+            load_data();
         case 0: // 退出系统
             printf("感谢使用，再见！\n");
             return;
