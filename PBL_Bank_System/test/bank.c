@@ -1,21 +1,13 @@
 #include "bank.h"
 
 int main()
-{
-    // 程序启动时，首先尝试从文件加载数据
+{  
     load_data();
-
-    // 进入系统主循环
     run_system();
-
     return 0;
 }
-
-// ====== 全局变量定义 ======
-Account accounts[MAX_ACCOUNTS]; // 账户数组
-int account_count = 0;          // 当前账户数量
-
-// ====== 主菜单显示 ======
+Account accounts[MAX_ACCOUNTS]; 
+int account_count = 0;          
 void show_menu()
 {
     printf("\n========== 简易银行账户管理系统 ==========\n");
@@ -31,8 +23,6 @@ void show_menu()
     printf("==========================================\n");
     printf("请输入您的选择（0-8）：");
 }
-
-// ====== 主循环控制 ======
 void run_system()
 {
     int choice;
@@ -49,14 +39,14 @@ void run_system()
             clear_input_buffer();
             continue;
         }
-        clear_input_buffer(); // 清除输入缓冲区
+        clear_input_buffer(); 
 
         switch (choice)
         {
         case 1: // 开户
             printf("请输入账户姓名：");
             fgets(name, NAME_LEN, stdin);
-            name[strcspn(name, "\n")] = '\0'; // 去除换行符
+            name[strcspn(name, "\n")] = '\0'; 
             id = create_account(name);
             if (id != -1)
             {
@@ -68,11 +58,11 @@ void run_system()
             }
             break;
 
-        case 2: // TODO:显示所有账户
+        case 2: 
             display_all_accounts();
             break;
 
-        case 3: // 查找账户
+        case 3: 
             printf("请输入要查找的账户ID：");
             if (scanf("%d", &id) != 1)
             {
@@ -93,7 +83,7 @@ void run_system()
             }
             break;
 
-        case 4: // TODO:存款
+        case 4: 
             printf("请输入要存款的账户ID：");
 
             if (scanf("%d", &id)!=1)
@@ -115,7 +105,7 @@ void run_system()
             transaction(id, amount, 1);
             break;
 
-        case 5: // TODO:取款
+        case 5: 
             printf("请输入要取款的账户ID：");
 
             if (scanf("%d", &id) != 1)
@@ -137,7 +127,7 @@ void run_system()
             transaction(id, amount,2);
             break;
 
-        case 6: // 余额查询
+        case 6: 
             printf("请输入账户ID：");
             if (scanf("%d", &id) != 1)
             {
@@ -157,13 +147,13 @@ void run_system()
             }
             break;
 
-        case 7: // TODO:保存数据
+        case 7: 
             save_data();
             break;
-        case 8: // TODO:加载数据
+        case 8: 
             load_data();
             break;
-        case 0: // 退出系统
+        case 0: 
             printf("感谢使用，再见！\n");
             return;
         case 9:

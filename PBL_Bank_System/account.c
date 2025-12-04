@@ -30,6 +30,7 @@ int create_account(const char *name)
     strncpy(new_account.name, name, NAME_LEN - 1);
     new_account.name[NAME_LEN - 1] = '\0'; // 确保字符串以null结尾
     new_account.balance = 0.0;             // 新账户初始余额为0
+    new_account.status = 1;                // 启用账户
 
     // 4. 将新账户添加到全局数组中
     accounts[account_count] = new_account;
@@ -43,15 +44,19 @@ int create_account(const char *name)
 void display_all_accounts()
 {
     // 检查是否存在账户信息
-    if(account_count == 0){
+    if (account_count == 0)
+    {
         printf("当前系统不存在账户信息!\n");
         return;
     }
 
-    printf("ID\t姓名\t余额\n");
+    printf("ID\t姓名            余额\n");
     for (int i = 0; i < account_count; i++)
     {
-        printf("%d\t%s\t%.2f\n",accounts[i].id,accounts[i].name,accounts[i].balance);
+        if(accounts[i].status == -1){
+            continue;
+        }
+        printf("%d\t%s          %.2f\n", accounts[i].id, accounts[i].name, accounts[i].balance);
     }
     return;
 }
@@ -70,11 +75,56 @@ Account *find_account_by_id(int id)
     for (int i = 0; i < account_count; i++)
     {
         if (accounts[i].id == id)
-        {
+        { 
+            if(accounts[i].status == -1){
+                return NULL;
+            }
             return &accounts[i]; // 找到，返回账户指针
         }
     }
 
     // 3. 遍历结束未找到
     return NULL; // 失败：未找到
+}
+
+// ====== 账户查找 (FUN-103) ======
+// 根据账户姓名查找账户。如果找到，返回指向该账户的指针；否则返回NULL。
+Account *find_account_by_name(char *name)
+{
+    // 1. 遍历账户数组进行查找
+    for (int i = 0; i < account_count; i++)
+    {
+        if (!strcmp(accounts[i].name, name))
+        {
+            if (accounts[i].status == -1)
+            {
+                return NULL;
+            }
+            return &accounts[i]; // 找到，返回账户指针
+        }
+    }
+
+    // 3. 遍历结束未找到
+    return NULL; // 失败：未找到
+}
+
+// ====== 销户 (FUN-101) ======
+void delete_account(int id){
+    Account *acc = find_account_by_id(id);
+    if(acc == NULL){
+        printf("未找到该账户！\n");
+        return;
+    }
+    // 判断是否还有余额
+    if(acc->balance > 0){
+        printf("当前账户中仍有余额,无法销户!\n");
+        return;
+    }
+    // 销户
+    acc->status = -1;
+    strncpy(acc->name, "已注销", NAME_LEN - 1);
+    acc->name[NAME_LEN - 1] = '\0';
+    acc->balance = 0.0;
+    printf("销户成功!,销户ID:%d",acc->id);
+    return;
 }

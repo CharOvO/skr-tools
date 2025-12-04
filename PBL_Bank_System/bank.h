@@ -18,6 +18,7 @@ typedef struct
     int id;              // 账户ID
     char name[NAME_LEN]; // 账户姓名
     double balance;      // 账户余额
+    int status;          // 账户状态
 } Account;
 
 // ====== 全局变量声明 ======
@@ -34,6 +35,8 @@ void run_system(); // 系统主循环
 int create_account(const char *name); // 创建账户，返回账户ID
 void display_all_accounts();          // 显示所有账户
 Account *find_account_by_id(int id);  // 根据ID查找账户
+Account *find_account_by_name(char *name); // 根据姓名查找账户
+void delete_account(int id); // 根据ID销户
 
 // 交易操作模块（transaction.c）
 void transaction(int id, double amount, int option);

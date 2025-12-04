@@ -21,12 +21,15 @@ void show_menu()
     printf("\n========== 简易银行账户管理系统 ==========\n");
     printf("1. 开户\n");
     printf("2. 显示所有账户\n");
-    printf("3. 查找账户\n");
-    printf("4. 存款\n");
-    printf("5. 取款\n");
-    printf("6. 余额查询\n");
-    printf("7. 保存数据\n");
-    printf("8. 加载数据\n");
+    printf("3. 显示所有账户(自定义排序)\n");
+    printf("4. 查找账户(ID)\n");
+    printf("5. 查找账户(姓名)\n");
+    printf("6. 存款\n");
+    printf("7. 取款\n");
+    printf("8. 余额查询\n");
+    printf("9. 保存数据\n");
+    printf("10. 加载数据\n");
+    printf("11. 销户\n");
     printf("0. 退出系统\n");
     printf("==========================================\n");
     printf("请输入您的选择（0-8）：");
@@ -71,8 +74,9 @@ void run_system()
         case 2: // TODO:显示所有账户
             display_all_accounts();
             break;
-
-        case 3: // 查找账户
+        case 3:
+            printf("");
+        case 4: // 查找账户-ID
             printf("请输入要查找的账户ID：");
             if (scanf("%d", &id) != 1)
             {
@@ -93,10 +97,28 @@ void run_system()
             }
             break;
 
-        case 4: // TODO:存款
+        case 5: // 查找账户-name
+            printf("请输入要查找账户姓名：");
+            fgets(name, NAME_LEN, stdin);
+            name[strcspn(name, "\n")] = '\0'; 
+            // clear_input_buffer();
+            acc = find_account_by_name(name);
+            if (acc)
+            {
+                printf("ID\t姓名\t余额\n");
+                printf("%d\t%s\t%.2f\n", acc->id, acc->name, acc->balance);
+            }
+            else
+            {
+                printf("未找到该账户！\n");
+            }
+            break;
+
+        
+        case 6: // TODO:存款
             printf("请输入要存款的账户ID：");
 
-            if (scanf("%d", &id)!=1)
+            if (scanf("%d", &id) != 1)
             {
                 printf("输入错误，请输入数字！\n");
                 clear_input_buffer();
@@ -110,12 +132,12 @@ void run_system()
                 clear_input_buffer();
                 break;
             }
-           
+
             clear_input_buffer();
             transaction(id, amount, 1);
             break;
 
-        case 5: // TODO:取款
+        case 7: // TODO:取款
             printf("请输入要取款的账户ID：");
 
             if (scanf("%d", &id) != 1)
@@ -134,10 +156,10 @@ void run_system()
             }
 
             clear_input_buffer();
-            transaction(id, amount,2);
+            transaction(id, amount, 2);
             break;
 
-        case 6: // 余额查询
+        case 8: // 余额查询
             printf("请输入账户ID：");
             if (scanf("%d", &id) != 1)
             {
@@ -157,21 +179,26 @@ void run_system()
             }
             break;
 
-        case 7: // TODO:保存数据
+        case 9: // TODO:保存数据
             save_data();
             break;
-        case 8: // TODO:加载数据
+        case 10: // TODO:加载数据
             load_data();
             break;
+        case 11:
+            printf("请输入要销户的账户ID：");
+            if (scanf("%d", &id) != 1)
+            {
+                printf("输入错误，请输入数字！\n");
+                clear_input_buffer();
+                break;
+            }
         case 0: // 退出系统
             printf("感谢使用，再见！\n");
             return;
-        case 9:
-            printf("账户数%d\n",account_count);
-            for (int i = 0; i < account_count; i++)
-            {
-                printf("ID%d\n",accounts[i].id);
-            }
+            clear_input_buffer();
+            delete_account(id);
+            break;
         default:
             printf("无效选择，请重新输入！\n");
             break;
