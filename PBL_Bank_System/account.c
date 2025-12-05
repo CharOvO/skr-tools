@@ -53,11 +53,76 @@ void display_all_accounts()
     printf("ID\t姓名            余额\n");
     for (int i = 0; i < account_count; i++)
     {
-        if(accounts[i].status == -1){
+        if (accounts[i].status == -1)
+        {
             continue;
         }
         printf("%d\t%s          %.2f\n", accounts[i].id, accounts[i].name, accounts[i].balance);
     }
+    return;
+}
+
+// ====== 自定义显示所有账户 (FUN-102) ======
+void custom_display_all_accounts(int choice)
+{
+    if (choice > 3 || choice < 1)
+    {
+        printf("输入错误,请输入指定数字!\n");
+        return;
+    }
+    // 检查是否存在账户信息
+    if (account_count == 0)
+    {
+        printf("当前系统不存在账户信息!\n");
+        return;
+    }
+    
+
+    // 自定义排序：1=id 2=name 3=balance（升序）
+    Account tmp[MAX_ACCOUNTS];
+    int n = 0;
+    // 挑选可用账户
+    for (int i = 0; i < account_count; i++){
+        if (accounts[i].status != -1){
+            tmp[n] = accounts[i];
+            n++;
+        }
+    }
+    // 冒泡
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            int swap = 0;
+            if (choice == 1)
+            {
+                if (tmp[i].id > tmp[j].id){
+                    swap = 1;
+                }
+            }
+            else if (choice == 2)
+            {
+                if (strcmp(tmp[i].name, tmp[j].name) > 0){
+                    swap = 1;
+                }
+            }
+            else if (choice == 3)
+            {
+                if (tmp[i].balance > tmp[j].balance){
+                    swap = 1;
+                }
+            }
+            if (swap)
+            {
+                Account t = tmp[i];
+                tmp[i] = tmp[j];
+                tmp[j] = t;
+            }
+        }
+    }
+    printf("ID\t姓名            余额\n");
+    for (int i = 0; i < n; i++)
+        printf("%d\t%s          %.2f\n", tmp[i].id, tmp[i].name, tmp[i].balance);
     return;
 }
 
@@ -75,8 +140,9 @@ Account *find_account_by_id(int id)
     for (int i = 0; i < account_count; i++)
     {
         if (accounts[i].id == id)
-        { 
-            if(accounts[i].status == -1){
+        {
+            if (accounts[i].status == -1)
+            {
                 return NULL;
             }
             return &accounts[i]; // 找到，返回账户指针
@@ -109,14 +175,17 @@ Account *find_account_by_name(char *name)
 }
 
 // ====== 销户 (FUN-101) ======
-void delete_account(int id){
+void delete_account(int id)
+{
     Account *acc = find_account_by_id(id);
-    if(acc == NULL){
+    if (acc == NULL)
+    {
         printf("未找到该账户！\n");
         return;
     }
     // 判断是否还有余额
-    if(acc->balance > 0){
+    if (acc->balance > 0)
+    {
         printf("当前账户中仍有余额,无法销户!\n");
         return;
     }
@@ -125,6 +194,6 @@ void delete_account(int id){
     strncpy(acc->name, "已注销", NAME_LEN - 1);
     acc->name[NAME_LEN - 1] = '\0';
     acc->balance = 0.0;
-    printf("销户成功!,销户ID:%d",acc->id);
+    printf("销户成功!,销户ID:%d", acc->id);
     return;
 }

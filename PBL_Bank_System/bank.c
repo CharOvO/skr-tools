@@ -74,8 +74,17 @@ void run_system()
         case 2: // TODO:显示所有账户
             display_all_accounts();
             break;
-        case 3:
-            printf("");
+        case 3: // 自定义显示所有账户
+            printf("选择排序方式：1:id 2:姓名 3:余额：");
+            if (scanf("%d", &choice) != 1)
+            {
+                clear_input_buffer();
+                printf("输入错误,请输入数字!");
+                break;
+            }
+            clear_input_buffer();
+            custom_display_all_accounts(choice);
+            break;
         case 4: // 查找账户-ID
             printf("请输入要查找的账户ID：");
             if (scanf("%d", &id) != 1)
